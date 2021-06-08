@@ -1,53 +1,59 @@
-const { Console } = require('console')
-const express = require('express')
+const express = require ('express')
 const app = express()
-const bodyParser= require('body-parser')
+const bodyParser = require('body-parser')
 const mongoose= require ('mongoose')
+const cors= require ('cors')
 
-mongoose.connect('mongodb://localhost:27017/latihan', {
+mongoose.connect('mongodb://localhost:27017/Latihan', {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
     useCreateIndex: true
 }).then (() => {
-    console.log('connected')
+    console.log('Connect to DB')
 }).catch((e)=>{
     console.log(e)
-    console.log('unconnected')
+    console.log('Unconnected to DB')
 })
 
+app.use(cors());
+app.options("*", cors());
+
 app.use(bodyParser.json({
-    extend: true,
+    extends: true,
     limit: '20mb'
 }))
 
 app.use(bodyParser.urlencoded({
-    extend: true,
+    extended: true,
     limit: '20mb'
 }))
 
-app.get('/', (req, res)=>{
-    res.send('<h1>hello world 1</h1>')
-
+app.get('/', (req, res) => {
+    res.send('<h1>Hello World</h1>')
 })
 
-app.get('/profile/:username/:id', (req, res)=>{
+app.get('/profile/:username/:id', (req, res) =>{
     console.log(req.params)
-    res.send('username = '+ req.params.username)
-})
-//req params
-app.get('/daerah/:daerah', (req, res)=>{
-    console.log(req.params)
-    res.send('daerah anda = '+ req.params.daerah)
+    res.send('Username Anda ' + req.params.username)
+
 })
 
-//req body
-//app.post('/register', (req, res)=> {
-//    console.log(req.body)
+app.get('/daerah/:namaDaerah/:id', (req, res) =>{
+    const namaDaerah = req.params.namaDaerah
+    const idDaerah = req.params.id
+    res.send('Daerah Anda ' + namaDaerah + ' Id daerah = ' + idDaerah)
+
+})
+
+//app.post('/register',(req, res) =>{
+    //console.log(req.body)
     //res.json(req.body)
 //})
-app.use('/user/', require('./routes/User'))
 
-app.listen(3000, () => {
-    console.log('server started')
+app.use('/user',require('./routes/User'))
+app.use('/Kegiatan',require('./routes/Kegiatan'))
+
+app.listen(3000, () =>{
+    console.log('Server Started')
 })

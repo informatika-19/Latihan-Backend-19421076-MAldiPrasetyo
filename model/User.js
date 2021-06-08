@@ -3,7 +3,7 @@ const Schema = mongoose.Schema
 
 const UserSchema = new Schema ({
     //username : String
-    //pakai defautl
+    //pakai default
     username : {
         default: '',
         type: String
